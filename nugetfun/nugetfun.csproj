@@ -5,5 +5,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <RestoreLockedMode>true</RestoreLockedMode>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <RuntimeFrameworkVersion>2.2.4</RuntimeFrameworkVersion>
+    <RuntimeIdentifiers>debian.9-x64;ubuntu.18.04-x64</RuntimeIdentifiers>
   </PropertyGroup>
 </Project>
