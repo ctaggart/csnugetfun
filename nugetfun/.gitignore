@@ -3,3 +3,5 @@ bin/
 .vs/
 launchSettings.json
 *.user
+out/
+npm/

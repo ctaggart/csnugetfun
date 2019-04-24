@@ -1,9 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <ToolCommandName>nbgv</ToolCommandName>
+    <PackAsTool>True</PackAsTool>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <RestoreLockedMode>true</RestoreLockedMode>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <!-- <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> -->
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="LibGit2Sharp" Version="0.26.0" />
+  </ItemGroup>
+
+  <!-- test with dotnet pack /v:n -->
+  <Target Name="ExpandForNpmPackage" DependsOnTargets="GenerateNuSpec" AfterTargets="GenerateNuSpec">
+    <Message Importance="High" Text="Copying Files" />
+    <!-- <Message Importance="High" Text="@(_PackageFiles)" /> -->
+    <PropertyGroup>
+      <!-- <NpmPackageLayoutDir>..\nerdbank-gitversioning.npm\out\nbgv.cli\</NpmPackageLayoutDir> -->
+      <NpmPackageLayoutDir>npm\</NpmPackageLayoutDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <NpmPackageLayout Include="@(_PackageFiles)">
+        <!-- <TargetPath Condition=" '%(_PackageFiles.PackagePath)' != '' ">$(NpmPackageLayoutDir)$([System.IO.Path]::GetDirectoryName('%(_PackageFiles.PackagePath)'))\%(FileName)%(Extension)</TargetPath> -->
+        <TargetPath Condition=" '%(_PackageFiles.PackagePath)' != '' ">$(NpmPackageLayoutDir)%(_PackageFiles.PackagePath)\%(FileName)%(Extension)</TargetPath>
+        <TargetPath Condition=" '%(_PackageFiles.PackagePath)' == '' ">$(NpmPackageLayoutDir)%(FileName)%(Extension)</TargetPath>
+      </NpmPackageLayout>
+    </ItemGroup>
+    <Copy SourceFiles="@(NpmPackageLayout)" DestinationFiles="@(NpmPackageLayout->'%(TargetPath)')" />
+  </Target>
 </Project>
